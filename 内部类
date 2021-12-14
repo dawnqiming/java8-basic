@@ -1,0 +1,112 @@
+一.概述
+  内部类是一个编译时的概念，一旦编译成功，就会称为两个完全不同的类，分别是outer.class和out$inner.class类。所以内部类的成员变量/方法名可以和外部类的相同。
+二.使用动机
+  1.内部类可以很好的实现隐藏 
+  2.一般的非内部类，是不允许有 private 与protected权限的，但内部类可以 
+  3.非静态内部类拥有外围类的所有元素的访问权限 (private修饰也能访问) 
+  4.可是实现多重继承 (让多个内部类分别继承多个其他类，使外部类可以同时获取多个其他类的属性) 
+  5.可以避免修改接口而实现同一个类中两种同名方法的调用。(外部类继承，让内部类实现接口)
+三.分类
+  根据内部类的位置、修饰符和定义的方式可分为：
+  修饰符：public和默认(default)。因为外部类的上一单元是包，所以外部类只有两个作用域：同包，任何位置。
+因此，只需要两种控制权限：包控制权限和公开访问权限，也就对应两种控制修饰符：public和默认(default)。可以满足所有的情况了。
+
+四.使用方法
+4.1 静态内部类
+  可以用static关键字来修饰一个成员内部类，该内部类被称作静态内部类，它可以在不创建外部类对象的情况下被实例化。
+  创建静态内部类对象的具体语法： > 外部类名.内部类名 变量名 = new 外部类名.内部类名();
+  在静态内部类中只能访问外部类的静态成员;在静态内部类中只能定义静态的成员，而在非静态的内部类中不允许定义静态的成员
+
+public class Java8Tester2 {
+    public static void main(String[] args) {
+        Outer outer = new Outer();
+        Outer.Inner inner = new Outer.Inner();
+        inner.write();
+    }
+}
+
+class Outer{
+    static int i = 1;
+    int j = 2;
+    static class Inner{
+         void write() {
+            System.out.println("静态内部类使用外部类的静态变量i："+ i);
+//            System.out.println("静态内部类使用外部类的变量i："+ j);
+        }
+    }
+}
+
+4.2 非静态内部类
+  非静态内部类必须存在。因此如果有一个非静态内部类对象被创建，那么它的外部类对象一定会被创建，非静态内部类对象单独属于外部类的某个对象。 
+  非静态内部类是属于外部类的某个对象，因此不能有静态方法，属性，静态初始化块。 
+  外部类的静态方法不能使用非静态内部类(因为非静态内部类是属于对象的，外部类的静态方法是属于外部类的，外部类对象还未被创建，因此不能用)，包括不能使用非静态内部类定义变量，
+创建实例,但非静态内部类可以使用外部类的属性及方法。 ☞非静态内部类对象可以单独访问外部类成员，但外部类对象不能直接访问非静态内部类的成员。如果想通过外部类去访问内部类，
+则需要通过外部类对象去创建内部类对象，创建内部类对象的具体语法： > 外部类名.内部类名 变量名 = new 外部类名().new 内部类名
+
+4.2.1 成员内部类
+> 在一个类中除了可以定义成员变量、成员方法、还可以定义类，这样的类被称为成员内部类。 在成员内部类中可以访问外部类的所有成员
+public class Java8Tester2 {
+    private static int num = 1;
+
+    class inner {
+        void add() {
+            System.out.println("成员内部类num：" + num);
+        }
+    }
+
+    public static void main(String[] args) {
+        Java8Tester2.inner inner = new Java8Tester2().new inner();
+        inner.add();
+    }
+}
+
+4.2.2 局部内部类(方法内部类)
+  局部内部类:定义在方法内部的，作用域只限于本方法 > 局部内部类的的使用主要是用来解决比较复杂的问题，想创建一个类来辅助我们的解决方案，到那时又不希望这个类是公共可用的，
+所以就产生了局部内部类。局部内部类和成员内部类一样被编译，只是它的作用域发生了改变，它只能在该方法中被使用，出了该方法就会失效。[方法内部类也能访问外部类的成员变量]
+
+public class Java8Tester2 {
+    private static int num = 1;
+
+    public void methodClass() {
+        class Inner {
+            void add() {
+                System.out.println("方法内部类num：" + num);
+            }
+        }
+        Inner inner = new Inner();
+        inner.add();
+    }
+    public static void main(String[] args) {
+        Java8Tester2 test = new Java8Tester2();
+        test.methodClass();
+    }
+}
+
+4.2.3 匿名内部类
+  根据多态的知识：如果方法的参数被定义为一个接口类型，那么就需要定义一个类来实现接口，并根据该类进行对象实例化。除此之外还可以使用匿名内部类来实现。
+匿名内部类一定继承某一个类或者实现接口，必须去实现抽象类的方法或者接口的方法。 
+  匿名内部类的使用场景，通常来说，就是在一个内部类，只要创建一次，使用一次，以后就不再使用的情况下，就可以。那么，此时，通常不会选择在外部创建一个类，
+而是选择直接创建一个实现了某个接口、或者继承了某个父类的内部类，而且通常是在方法内部，创建一个匿名内部类。匿名内部类格式：  new 父类（参数列表）或 父接口(){ //匿名内部类实现部分 }
+
+interface Animal {
+    void eat();
+}
+
+public class InnerAnimal {
+    public static void animalEat(Animal a) {
+        a.eat();
+    }
+
+    public static void main(String[] args) {
+        animalEat(new Animal() {
+            @Override
+            public void eat() {
+                System.out.println("海底捞");
+            }
+        });
+    }
+}
+
+
+
+
