@@ -1,4 +1,18 @@
 # java8-basic
+JDK 8 中提供了一组常用的核心函数接口：
+
+  接口	               参数      	      返回类型	            			描述
+Predicate<T>	      	 T		  boolean	   		用于判别一个对象。比如求一个人是否为男性
+Consumer<T>	         T		  void				用于接收一个对象进行处理但没有返回，比如接收一个人并打印他的名字
+Function<T, R>	         T		   R			        转换一个对象为不同类型的对象
+Supplier<T>	        None		   T				提供一个对象
+UnaryOperator<T>	 T	           T				接收对象并返回同类型的对象
+BinaryOperator<T>      (T, T)	      	   T				接收两个同类型的对象，并返回一个原类型对象
+其中 Cosumer 与 Supplier 对应，一个是消费者，一个是提供者。
+Predicate 用于判断对象是否符合某个条件，经常被用来过滤对象。
+Function 是将一个对象转换为另一个对象，比如说要装箱或者拆箱某个对象。
+UnaryOperator 接收和返回同类型对象，一般用于对对象修改属性。BinaryOperator 则可以理解为合并对象。
+
 lambda表达式学习
     1、使用的依据
 能够使用Lambda的依据是必须有相应的函数接口（函数接口，是指内部只有一个抽象方法的接口）。这一点跟Java是强类型语言吻合，也就是说你并不能在代码的任何地方任性的写Lambda表达式。实际上Lambda的类型就是对应函数接口的类型。Lambda表达式另一个依据是类型推断机制，在上下文信息足够的情况下，编译器可以推断出参数表的类型，而不需要显式指名。Lambda表达更多合法的书写形式如下：
