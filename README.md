@@ -54,3 +54,4 @@ MyStream<String> stream = new MyStream<String>();
 stream.myForEach(str -> System.out.println(str));// 使用自定义函数接口书写Lambda表达式   
     
     3、Lambda表达式和匿名内部类在JVM层面的区别
+	https://blog.csdn.net/neweastsun/article/details/89504811
